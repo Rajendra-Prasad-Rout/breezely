@@ -1,5 +1,9 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: Breezely
-server:
-  port: 8081
+  data:
+    mongodb:
+      uri: mongodb+srv://raj:root@raj.mezey0i.mongodb.net/breezely
