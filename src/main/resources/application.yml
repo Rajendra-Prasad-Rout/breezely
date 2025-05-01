@@ -6,4 +6,4 @@ spring:
     name: Breezely
   data:
     mongodb:
-      uri: mongodb+srv://raj:root@raj.mezey0i.mongodb.net/breezely
+      uri: ${MONGO_URI}
