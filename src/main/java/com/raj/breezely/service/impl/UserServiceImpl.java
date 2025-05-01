@@ -1,8 +1,10 @@
 package com.raj.breezely.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.raj.breezely.entity.Users;
 import com.raj.breezely.repository.UserRepository;
 import com.raj.breezely.service.UserService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,5 +51,49 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public Users update(ObjectId objectId, JsonNode requestBody) {
+        Users user = userRepository.findById(objectId)
+                .filter(Users::getIsActive)
+                .orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        String name = requestBody.path("name").asText(null);
+        String email = requestBody.path("email").asText(null);
+
+        boolean changed = false;
+
+        if (name != null && !name.equals(user.getName())) {
+            user.setName(name);
+            changed = true;
+        }
+
+        if (email != null && !email.equals(user.getEmail())) {
+            user.setEmail(email);
+            changed = true;
+        }
+
+        if (changed) {
+            userRepository.save(user);
+        }
+
+        return user;
+    }
+
+    @Override
+    public void delete(ObjectId objectId) {
+        Users user = userRepository.findById(objectId)
+                .filter(Users::getIsActive)
+                .orElse(null);
+
+        if (user != null) {
+            userRepository.delete(user);
+        }
+    }
+
 
 }
