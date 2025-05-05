@@ -3,6 +3,7 @@ package com.raj.breezely.service.impl;
 import com.raj.breezely.entity.Journals;
 import com.raj.breezely.repository.JournalRepository;
 import com.raj.breezely.service.JournalService;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class JournalServiceImpl implements JournalService {
 
@@ -30,7 +32,7 @@ public class JournalServiceImpl implements JournalService {
             journalRepository.save(newJournals);
             return true;
         } catch (Exception exception) {
-            System.out.println("Exception: " + exception.getMessage());
+            log.error("Some error occured for ", journals.getTitle(), exception);
             return false;
         }
     }
